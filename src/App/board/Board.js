@@ -11,16 +11,18 @@ import {
 import styles from '../styles/styles';
 import Card from '../card/Card';
 import Row from '../row/Row';
+import Timer from '../dashboard/Timer';
+import Moves from '../dashboard/Moves';
 
 class Board extends React.Component {
   constructor() {
     super();
     this.state = {
-      steps: 0,
       rows: this.initRows(),
       lastselected: {},
+      moves: 0,
       count: 0,
-      timer: 0,
+      isDisabled: false,
     };
   }
 
@@ -67,16 +69,15 @@ class Board extends React.Component {
   reset = () => {
     let rows = this.initRows();
     this.setState({
-      steps: 0,
       rows: rows,
       lastselected: {},
+      moves: 0,
       count: 0,
-      timer: 0,
+      isDisabled: false,
     });
   };
 
   onCardSelect = async (card) => {
-    await this.setState({steps: this.state.steps + 1});
     this.state.rows.map((row, rowIndex) => {
       row.map(async (r) => {
         if (r.id === card.id) {
@@ -88,17 +89,20 @@ class Board extends React.Component {
               r.value === this.state.lastselected.value &&
               r.id !== this.state.lastselected.id
             ) {
-              await this.setState({count: this.state.count + 2});
-              console.log('match' + this.state.count);
               r.solved = true;
-              this.state.lastselected = {};
+              this.setState({
+                moves: this.state.moves + 1,
+                count: this.state.count + 1,
+              });
               this.state.rows.map((row, rowIndex) => {
                 row.map((r) => {
                   if (r.id === this.state.lastselected.id) {
                     r.solved = true;
+                    this.state.lastselected = {};
                   }
                 });
               });
+              this.setState({rows: this.state.rows});
             } else {
               setTimeout(() => {
                 this.state.rows.map((row, rowIndex) => {
@@ -109,43 +113,33 @@ class Board extends React.Component {
                     ) {
                       r.display = false;
                       card.display = false;
-                      this.state.lastselected = {};
+                      this.setState({
+                        moves: this.state.moves + 1,
+                        lastselected: {},
+                        isDisabled: false,
+                      });
                     }
                   });
                 });
                 this.setState({rows: this.state.rows});
               }, 1000);
+              this.state.isDisabled = true;
             }
           }
         }
       });
     });
     this.setState({rows: this.state.rows});
-
-    console.log(this.state.steps);
-    if (this.state.steps == 1) {
-      this.initTimer();
-    }
-
-    console.log('last' + this.state.count);
-    if (this.state.count == 30) {
+    if (this.count == 15) {
       this.onFinish();
     }
-  };
-
-  initTimer = () => {
-    this.timer = setInterval(() => {
-      this.setState((prevState) => ({
-        timer: prevState.timer + 1,
-      }));
-    }, 1000);
   };
 
   displayAlert = () => {
     if (Platform.OS === 'web') {
       const confirmAction = window.confirm(
         'Congratulations!!',
-        `You have completed the puzzle in ${this.state.steps} steps and ${this.state.timer} seconds.`,
+        `You have completed the game in ${this.state.moves} moves.`,
       );
       if (confirmAction) {
         this.reset();
@@ -154,7 +148,7 @@ class Board extends React.Component {
     } else {
       Alert.alert(
         'Congratulations!!',
-        `You have completed the puzzle in ${this.state.steps} steps and ${this.state.timer} seconds.`,
+        `You have completed the game in ${this.moves} moves.`,
         [{text: 'OK', onPress: this.reset}],
         {cancelable: false},
       );
@@ -170,11 +164,9 @@ class Board extends React.Component {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
-        <Text style={styles.title}>Memory Game</Text>
-        <Text style={styles.timer} id="timer">
-          Timer:{this.state.timer}
-        </Text>
-        <Text style={styles.timer}>Steps:{this.state.steps}</Text>
+        <Text style={styles.title}>Memory Matching Game</Text>
+        <Timer />
+        <Moves total={this.state.moves} solved={this.state.count} />
         <SafeAreaView style={styles.safearea}>
           {this.state.rows.map((row, rowIndex) => (
             <Row key={rowIndex} index={rowIndex}>
@@ -182,6 +174,7 @@ class Board extends React.Component {
                 return (
                   <Card
                     key={card.id}
+                    isDisabled={this.state.isDisabled}
                     display={card.display}
                     solved={card.solved}
                     displayImage={card.value}
