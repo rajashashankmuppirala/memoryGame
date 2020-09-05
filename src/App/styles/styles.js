@@ -7,7 +7,7 @@ const CARD_HEIGHT = Math.floor(CARD_WIDTH * (323 / 222));
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'gray',
-    paddingTop: 10,
+    paddingTop: 50,
     flex: 1,
   },
   title: {
@@ -18,13 +18,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   timer: {
+    paddingTop: 3,
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
     color: 'white',
-    fontSize: 10,
+    fontSize: 14,
   },
   safearea: {
+    paddingTop: 10,
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,

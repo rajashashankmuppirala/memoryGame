@@ -105,7 +105,7 @@ class Board extends React.Component {
                 });
               });
               await this.setState({rows: this.state.rows});
-              if (this.state.count == 1) {
+              if (this.state.count == 15) {
                 this.onFinish();
               }
             } else {
@@ -138,6 +138,7 @@ class Board extends React.Component {
   };
 
   displayAlert = () => {
+    this.timerElement.current.stopTimer();
     if (Platform.OS === 'web') {
       const confirmAction = window.confirm(
         'Congratulations!!' +
@@ -164,7 +165,7 @@ class Board extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="light-content" />
+        <StatusBar />
         <Text style={styles.title}>Memory Matching Game</Text>
         <Timer ref={this.timerElement} />
         <Moves total={this.state.moves} solved={this.state.count} />

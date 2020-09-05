@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
 import styles from '../styles/styles';
 
 class Timer extends React.Component {
@@ -19,6 +19,10 @@ class Timer extends React.Component {
     }, 1000);
   };
 
+  stopTimer = () => {
+    clearInterval(this.timer);
+  }
+
   refreshTimer = () => {
     clearInterval(this.timer);
     this.setState({timer: 0});
@@ -29,7 +33,7 @@ class Timer extends React.Component {
     return (
       <TouchableOpacity>
         <Text style={styles.timer} id="timer">
-          Timer:{this.state.timer}
+          Timer: {this.state.timer}
         </Text>
       </TouchableOpacity>
     );

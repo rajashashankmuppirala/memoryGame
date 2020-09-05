@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
 import styles from '../styles/styles';
 
 class Moves extends React.Component {
@@ -7,10 +7,10 @@ class Moves extends React.Component {
     return (
       <TouchableOpacity>
         <Text style={styles.timer} id="steps">
-          Moves:{this.props.total}
+          Moves: {this.props.total}
         </Text>
         <Text style={styles.timer} id="steps">
-          Solved:{this.props.solved}
+          Solved: {this.props.solved}
         </Text>
       </TouchableOpacity>
     );
