@@ -24,6 +24,7 @@ class Board extends React.Component {
       count: 0,
       isDisabled: false,
     };
+    this.timerElement = React.createRef();
   }
 
   initRows = () => {
@@ -67,6 +68,7 @@ class Board extends React.Component {
   };
 
   reset = () => {
+    this.timerElement.current.refreshTimer();
     let rows = this.initRows();
     this.setState({
       rows: rows,
@@ -90,7 +92,7 @@ class Board extends React.Component {
               r.id !== this.state.lastselected.id
             ) {
               r.solved = true;
-              this.setState({
+              await this.setState({
                 moves: this.state.moves + 1,
                 count: this.state.count + 1,
               });
@@ -102,7 +104,10 @@ class Board extends React.Component {
                   }
                 });
               });
-              this.setState({rows: this.state.rows});
+              await this.setState({rows: this.state.rows});
+              if (this.state.count == 1) {
+                this.onFinish();
+              }
             } else {
               setTimeout(() => {
                 this.state.rows.map((row, rowIndex) => {
@@ -129,17 +134,14 @@ class Board extends React.Component {
         }
       });
     });
-    this.setState({rows: this.state.rows});
-    if (this.count == 15) {
-      this.onFinish();
-    }
+    await this.setState({rows: this.state.rows});
   };
 
   displayAlert = () => {
     if (Platform.OS === 'web') {
       const confirmAction = window.confirm(
-        'Congratulations!!',
-        `You have completed the game in ${this.state.moves} moves.`,
+        'Congratulations!!' +
+          `You have completed the game in ${this.state.moves} moves.`,
       );
       if (confirmAction) {
         this.reset();
@@ -148,7 +150,7 @@ class Board extends React.Component {
     } else {
       Alert.alert(
         'Congratulations!!',
-        `You have completed the game in ${this.moves} moves.`,
+        `You have completed the game in ${this.state.moves} moves.`,
         [{text: 'OK', onPress: this.reset}],
         {cancelable: false},
       );
@@ -156,7 +158,6 @@ class Board extends React.Component {
   };
 
   onFinish = () => {
-    clearInterval(this.timer);
     setTimeout(() => this.displayAlert(), 1);
   };
 
@@ -165,7 +166,7 @@ class Board extends React.Component {
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
         <Text style={styles.title}>Memory Matching Game</Text>
-        <Timer />
+        <Timer ref={this.timerElement} />
         <Moves total={this.state.moves} solved={this.state.count} />
         <SafeAreaView style={styles.safearea}>
           {this.state.rows.map((row, rowIndex) => (

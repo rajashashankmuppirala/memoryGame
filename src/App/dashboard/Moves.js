@@ -4,7 +4,6 @@ import styles from '../styles/styles';
 
 class Moves extends React.Component {
   render() {
-    console.log('steps called');
     return (
       <TouchableOpacity>
         <Text style={styles.timer} id="steps">

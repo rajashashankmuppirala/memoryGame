@@ -19,6 +19,12 @@ class Timer extends React.Component {
     }, 1000);
   };
 
+  refreshTimer = () => {
+    clearInterval(this.timer);
+    this.setState({timer: 0});
+    this.initTimer();
+  };
+
   render() {
     return (
       <TouchableOpacity>
