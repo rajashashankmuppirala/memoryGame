@@ -33,7 +33,7 @@ Response Web App:
 # Install Dependencies
 $ yarn install
 
-# Build and packing app.
+# Build and packaging app.
 $ yarn run build 
 
 # Run as ios app.
@@ -42,7 +42,7 @@ $ yarn run ios
 # Run as andoid app.
 $ yarn run android 
 
-# Build as a web app.
+# Run as a web app.
 $ yarn run web 
 
 ```
