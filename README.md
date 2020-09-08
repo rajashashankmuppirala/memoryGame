@@ -4,6 +4,7 @@ This is a Memory Game App using React Native Web to demonstrate / explore the po
 of having a single codebase for an app, which can be compiled/run as a responsive web app, <br> 
 native android app and a native ios app.
 
+The webapp can be accessed @ https://shashank.ml/memory-game/
 
 -----
 
@@ -19,7 +20,7 @@ Android App:
 
 Response Web App:
 
-<img src="https://github.com/rajashashankmuppirala/memoryGame/raw/master/screenshots/web_browser.jpg" width="600" height="660" /><br>
+<img src="https://github.com/rajashashankmuppirala/memoryGame/raw/master/screenshots/web_browser.jpg" width="900" height="660" /><br>
 
 
 -----
